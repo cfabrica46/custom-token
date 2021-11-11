@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >-0.4.4 < 0.7.0;
+pragma solidity >=0.4.4 < 0.7.0;
 pragma experimental ABIEncoderV2;
-import "./SafeMath.sol"
+import "./SafeMath.sol";
 
 //Interface de nuestro token ERC20
 interface IERC20{
@@ -15,7 +15,7 @@ interface IERC20{
 	function allowance(address owner, address spender) external view returns (uint256);
 
 	//Devuelve un valor booleano resultado de la operacion indicada
-	function transfer(address recipent, uint256, amount) external returns (bool);
+	function transfer(address recipent, uint256 amount) external returns (bool);
 
 	//Devuelve un valor booleano con el resultado de la operacion de gasto
 	function approve(address spender, uint256 amount) external returns (bool);
@@ -33,7 +33,7 @@ interface IERC20{
 //Implementacion de las funciones del token ERC20
 contract ERC20Basic is IERC20{
 
-	string public constant name = "ERC20BlockcahinAZ"
+	string public constant name = "ERC20BlockcahinAZ";
 	string public constant symbol = "ERC";
 	uint8 public constant decimals = 18;
 
@@ -43,7 +43,7 @@ contract ERC20Basic is IERC20{
 	using SafeMath for uint256;
 
 	mapping (address => uint) balances;
-	mapping address => mapping (address => uint) allowed;
+	mapping (address => mapping (address => uint)) allowed;
 	uint256 totalSupply_;
 
 	constructor (uint256 initialSupply) public{
@@ -51,7 +51,7 @@ contract ERC20Basic is IERC20{
 		balances[msg.sender] = totalSupply_;
 	}
 
-	function totalSupply() public override view returns (uint265){
+	function totalSupply() public override view returns (uint256){
 		return totalSupply_;
 	}
 
@@ -76,13 +76,13 @@ contract ERC20Basic is IERC20{
 		return true;
 	}
 
-	function approve(address spender, uint256 numTokens) public override returns (bool){
+	function approve(address delegate, uint256 numTokens) public override returns (bool){
 		allowed[msg.sender][delegate] = numTokens;
 		emit Approval(msg.sender, delegate, numTokens);
 		return true;
 	}
 
-	function transferFrom(address sender, address buyer, uint256 numTokens) public override returns (bool){
+	function transferFrom(address owner, address buyer, uint256 numTokens) public override returns (bool){
 		require(numTokens <= balances[owner]);
 		require(numTokens <= allowed[owner][msg.sender]);
 
